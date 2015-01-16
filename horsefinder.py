@@ -1,92 +1,76 @@
 #!/usr/bin/python
 # =======================================
 #
-#  File Name : horsefinder.py
+#  File Name : twythontest.py
 #
 #  Purpose :
 #
-#  Creation Date : 14-01-2015
+#  Creation Date : 15-01-2015
 #
-#  Last Modified : Thu 15 Jan 2015 02:18:58 PM CST
+#  Last Modified : Fri 16 Jan 2015 04:23:35 PM CST
 #
 #  Created By : Brian Auron
 #
 # ========================================
 
-import twitter
-import requests
-import threading
-from random import choice
-from annoying_stuff import words
-from credentials import consumer, access
+import logging
 from time import sleep
-from getpass import getpass
-from pprint import pprint
+from twython import Twython, TwythonStreamer
+from credentials import consumer, access
+from threading import Thread
 
-consumer_key, consumer_secret = consumer['key'], consumer['secret']
-access_token_key, access_token_secret = access['key'], access['secret']
+logging.basicConfig(format='%(asctime)s %(message)s')
 
-def get_authed():
-    api = twitter.Api(consumer_key,
-                      consumer_secret,
-                      access_token_key,
-                      access_token_secret)
-    if not api.VerifyCredentials():
-        return False
-    else:
-        return api
-
-def rt_direct_messages():
-    while True:
-        api = get_authed()
-        dms = api.GetDirectMessages()
-        statuses = set()
-        for i in dms:
+class HorseTweeter(TwythonStreamer):
+    def on_success(self, data):
+        if 'text' in data:
             try:
-                link = requests.get(i.text)
-                status_id = link.url.split('/')[-1]
-                statuses.add(status_id)
+                retwython = Twython(consumer['key'],
+                                    consumer['secret'],
+                                    access['key'],
+                                    access['secret'])
+                retwython.retweet(id = data['id'])
+            except Exception as e:
+                logging.error('Could not retweet: {0}'.format(e))
+            sleep(1800)
+
+    def on_error(self, status_code, data):
+        print status_code
+
+class MessageStreamer(TwythonStreamer):
+    def on_success(self, data):
+        try:
+            status = data['direct_message']['entities']['urls'][0]['expanded_url']
+            status = status.split('/')[-1]
+            try:
+                retwython = Twython(consumer['key'],
+                                    consumer['secret'],
+                                    access['key'],
+                                    access['secret'])
+                retwython.retweet(id = status)
+            except Exception as e:
+                logging.error('Could not retweet: {0}'.format(e))
+        except:
+            try:
+                logging.info('Stream entry that wasn\'t a DM of a shared tweet: {1}'.format(data.text))
             except:
-                print "Bad or nonexistent link in DM. Discarding."
-            api.DestroyDirectMessage(i.id)
-        for s in statuses:
-            api.PostRetweet(s)
-        sleep(600)
+                logging.info('Stream entry with no text attribute.  ???')
 
-def remove_annoyances(statuses):
-    good_statuses = [s for s in statuses]
-    for s in statuses:
-        if not s.urls:
-            good_statuses.remove(s)
-        else:
-            for word in words:
-                if word.lower() in s.text.lower():
-                    good_statuses.remove(s)
-    return good_statuses
+    def on_error(self, status_code, data):
+        print status_code
+        self.disconnect()
 
-def find_horses():
-    while True:
-        api = get_authed()
-        horses = api.GetSearch('horse',include_entities = True)
-        good_horses = remove_annoyances(horses)
-        sid = choice(good_horses).id
-        api.PostRetweet(sid)
-        sleep(1800)
+streamer = MessageStreamer(consumer['key'],
+                         consumer['secret'],
+                         access['key'],
+                         access['secret'])
+streamthread = Thread(target = streamer.user)
+streamthread.start()
 
-def main():
-#    global consumer_key
-#    consumer_key = getpass('Consumer key: ')
-#    global consumer_secret
-#    consumer_secret = getpass('Consumer secret: ')
-#    global access_token_key
-#    access_token_key = getpass('Access token key: ')
-#    global access_token_secret
-#    access_token_secret = getpass('Access token secret: ')
-
-    dm_thread = threading.Thread(target = rt_direct_messages)
-    dm_thread.start()
-
-    horses_thread = threading.Thread(target = find_horses)
-    horses_thread.start()
-
-main()
+horses = HorseTweeter(consumer['key'],
+                     consumer['secret'],
+                     access['key'],
+                     access['secret'])
+horses.statuses.filter(track='horse')
+horsethread = Thread(target = horses.statuses.filter, args = ('horse',))
+horsethread.start()
