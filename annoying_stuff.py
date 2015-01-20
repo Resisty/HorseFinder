@@ -7,12 +7,21 @@
 #
 #  Creation Date : 14-01-2015
 #
-#  Last Modified : Wed 14 Jan 2015 03:47:36 PM CST
+#  Last Modified : Sat 17 Jan 2015 12:20:36 AM CST
 #
 #  Created By : Brian Auron
 #
 # ========================================
 
-words = ['My Little Pony',
-         'MyLittlePony',
-         'Pony']
+words = ['my little pony',
+         'mylittlepony',
+         'nigger',
+         'spic',
+         'wetback',
+         'wet back',
+         'gook',
+         'kike',
+         'sand nigger',
+         'sandnigger',
+         'dyke',
+         'faggot']
