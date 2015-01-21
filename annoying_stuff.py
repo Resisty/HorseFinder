@@ -7,7 +7,7 @@
 #
 #  Creation Date : 14-01-2015
 #
-#  Last Modified : Sat 17 Jan 2015 12:20:36 AM CST
+#  Last Modified : Wed 21 Jan 2015 10:02:16 AM CST
 #
 #  Created By : Brian Auron
 #
@@ -24,4 +24,11 @@ words = ['my little pony',
          'sand nigger',
          'sandnigger',
          'dyke',
-         'faggot']
+         'faggot',
+         'penis',
+         'cock',
+         'hung like a horse',
+         'hung like horse',
+         'riding like a horse',
+         'hung horse',
+         'dick',]
