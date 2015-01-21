@@ -7,7 +7,7 @@
 #
 #  Creation Date : 15-01-2015
 #
-#  Last Modified : Tue 20 Jan 2015 02:23:47 PM CST
+#  Last Modified : Tue 20 Jan 2015 06:32:58 PM CST
 #
 #  Created By : Brian Auron
 #
@@ -26,8 +26,17 @@ logging.basicConfig(filename='horsefinder.log',
                     level=logging.DEBUG)
 banned_regex = re.compile('|'.join(words), re.IGNORECASE)
 
+only_interests = ['horse']
+must_have_regex = re.compile('|'.join(only_interests), re.IGNORECASE)
+
 def has_banned_word(text):
     found = banned_regex.search(text)
+    if found:
+        return True
+    return False
+
+def has_interests(text):
+    found = must_have_regex.search(text)
     if found:
         return True
     return False
@@ -62,7 +71,6 @@ class MessageStreamer(TwythonStreamer):
         try:
             status = data['direct_message']['entities']['urls'][0]['expanded_url']
             status = status.split('/')[-1]
-
         except Exception as e:
             logging.error('MessageStreamer could not get status from DM: {0}'.format(e))
             return
@@ -73,17 +81,20 @@ class MessageStreamer(TwythonStreamer):
         except Exception as e:
             logging.error('MessageStreamer could not get real tweet: {0}'.format(e))
             return
-
         logging.info('MessageStreamer found a real tweet: {0}'.format(realTweet))
 
-        try:
-            if 'text' in realTweet and has_banned_word(realTweet['text']):
+        if 'text' in realTweet:
+            if has_banned_word(realTweet['text']):
                 logging.info('MessageStreamer found a bad word in some text: "{0}"'.format(realTweet['text']))
-            if 'text' in realTweet and not has_banned_word(realTweet['text']):
+            elif has_interests(realTweet['text']):
                 logging.info('MessageStreamer trying to retweet status: {0}'.format(status))
-                getTwitter().retweet(id = status)
-        except Exception as e:
-            logging.error('MessageStreamer could not retweet from DM: {0}'.format(e))
+                try:
+                    getTwitter().retweet(id = status)
+                except Exception as e:
+                    logging.error('MessageStreamer could not retweet from DM: {0}'.format(e))
+            else:
+                logging.info('MessageStreamer discarding real tweet, not relevant to interestes: {0}'.format(status))
+
 
     def on_error(self, status_code, data):
         logging.error('MessageStreamer twitter error code: {0}'.format(status_code))
