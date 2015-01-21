@@ -7,7 +7,7 @@
 #
 #  Creation Date : 14-01-2015
 #
-#  Last Modified : Wed 21 Jan 2015 10:02:16 AM CST
+#  Last Modified : Wed 21 Jan 2015 02:37:31 PM CST
 #
 #  Created By : Brian Auron
 #
@@ -31,4 +31,6 @@ words = ['my little pony',
          'hung like horse',
          'riding like a horse',
          'hung horse',
-         'dick',]
+         'dick',
+         'dark horse',
+         'darkhorse']

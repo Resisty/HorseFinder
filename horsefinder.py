@@ -7,7 +7,7 @@
 #
 #  Creation Date : 15-01-2015
 #
-#  Last Modified : Tue 20 Jan 2015 06:32:58 PM CST
+#  Last Modified : Wed 21 Jan 2015 10:14:40 AM CST
 #
 #  Created By : Brian Auron
 #
@@ -111,7 +111,7 @@ horses = HorseTweeter(consumer['key'],
                      consumer['secret'],
                      access['key'],
                      access['secret'])
-horses.statuses.filter(track='horse')
+horses.statuses.filter(track='horse,horsefacts')
 horsethread = Thread(target = horses.statuses.filter, args = ('horse',))
 horsethread.daemon = True
 horsethread.start()
