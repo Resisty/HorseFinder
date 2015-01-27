@@ -7,7 +7,7 @@
 #
 #  Creation Date : 15-01-2015
 #
-#  Last Modified : Thu 22 Jan 2015 05:49:13 PM CST
+#  Last Modified : Fri 23 Jan 2015 10:56:36 AM CST
 #
 #  Created By : Brian Auron
 #
@@ -38,28 +38,28 @@ def has_banned_word(tweet):
     status = tweet['id']
     user = tweet['user']['screen_name'].encode('utf-8')
     now = datetime.now().strftime("%F %T")
-    annoying = annoying_re.search(text)
-    hateful = hateful_re.search(text)
-    dirty = dirty_re.search(text)
+    annoying_text = annoying_re.search(text)
+    hateful_text = hateful_re.search(text)
+    dirty_text = dirty_re.search(text)
     try:
         db.connect()
-        if annoying:
+        if annoying_text:
             Banned.insert(flavor='annoying',
-                          trigger=annoying.group(),
+                          trigger=annoying_text.group(),
                           tweettext=text,
                           tweeter=user,
                           status=status,
                           datetime=now).execute()
-        if hateful:
+        if hateful_text:
             Banned.insert(flavor='hateful',
-                          trigger=annoying.group(),
+                          trigger=hateful_text.group(),
                           tweettext=text,
                           tweeter=user,
                           status=status,
                           datetime=now).execute()
-        if dirty:
+        if dirty_text:
             Banned.insert(flavor='dirty',
-                          trigger=annoying.group(),
+                          trigger=dirty_text.group(),
                           tweettext=text,
                           tweeter=user,
                           status=status,
@@ -68,7 +68,7 @@ def has_banned_word(tweet):
     except Exception as e:
         logging.info('Could not use db: {0}'.format(e))
 
-    if any([annoying, hateful, dirty]):
+    if any([annoying_text, hateful_text, dirty_text]):
         return True
     return False
 

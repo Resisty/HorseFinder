@@ -7,7 +7,7 @@
 #
 #  Creation Date : 14-01-2015
 #
-#  Last Modified : Thu 22 Jan 2015 10:15:45 AM CST
+#  Last Modified : Mon 26 Jan 2015 03:32:19 PM CST
 #
 #  Created By : Brian Auron
 #
@@ -22,11 +22,10 @@ hateful = ['nigger',
            'nigga',
            'spic',
            'wetback',
-           'wet back',
+           'wet[\s]*back',
            'gook',
            'kike',
-           'sand nigger',
-           'sandnigger',
+           'sand[\s]*nigger',
            'dyke',
            'rape',
            'faggot']
@@ -36,9 +35,8 @@ dirty = ['penis',
          'hung like a horse',
          'hung like horse',
          'riding like a horse',
-         'hung horse',
+         'hung[\s-]*horse',
          'dick',
          'fucking a horse',
          'sex',
-         "gentleman's club",
-         "gentlemen's club"]
+         "gentlem[ea]n(\'?s)? club"]

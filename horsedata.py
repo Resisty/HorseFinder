@@ -7,7 +7,7 @@
 #
 #  Creation Date : 21-01-2015
 #
-#  Last Modified : Thu 22 Jan 2015 04:53:04 PM CST
+#  Last Modified : Fri 23 Jan 2015 11:24:59 AM CST
 #
 #  Created By : Brian Auron
 #
@@ -26,7 +26,7 @@ class Banned(Model):
     datetime = DateTimeField()
 
     class Meta:
-        Database = db
+        database = db
 
 def create_tables():
     db.connect()
