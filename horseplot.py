@@ -39,28 +39,42 @@ def pull_data():
 
     return data_by_flavor
 
-def pygalify_flavor_data(flavor_data):
-    flavor = flavor_data.get().flavor
+def x_label_datetime3(rows):
+    maxdate = max([i.datetime for i in rows])
+    mindate = min([i.datetime for i in rows])
+    halfway = (maxdate - mindate) / 2 + mindate
+    return [mindate, halfway, maxdate]
+
+
+def pygal_dateyify(select):
+    flavor = select.get().flavor
     try:
-        assert all([i.flavor == flavor for i in flavor_data])
+        assert all([i.flavor == flavor for i in select])
     except Exception:
         logging.error('Different flavors returned in query. Unable to plot.')
 
     data = []
+    ordered_by_date = select.order_by(Banned.datetime)
+    value = 1
     linkfmt = 'https://twitter.com/{0}/status/{1}'
-    for i in flavor_data:
-        node = {'value': (i.datetime, randint(1,21)),
+    for i in ordered_by_date:
+        node = {'value': (i.datetime, value),
                 'label': i.tweettext,
                 'xlink': linkfmt.format(i.tweeter, i.status)}
         data.append(node)
+        value += 1
     return data
 
 
 def main():
-    datey = pygal.DateY(x_label_rotation=20)
     data_by_flavor = pull_data()
+    datey = pygal.DateY(x_label_rotation=20,
+                        title = 'Piecewise Trends of Filtered Tweets Over Time',
+                        x_title = 'Datetime',
+                        include_x_axis = True)
+    datey.x_labels = x_label_datetime3([i for j in data_by_flavor.values() for i in j])
     for flavor, flavor_data in data_by_flavor.iteritems():
-        pygal_data = pygalify_flavor_data(flavor_data)
+        pygal_data = pygal_dateyify(flavor_data)
         datey.add(flavor, pygal_data)
 
     with open('horseplot.svg', 'w') as f:
@@ -69,30 +83,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-#data = [{'value': (datetime(2015, 1, 27, 8, 39, 6), 1),
-#         'label': 'annoying',
-#         'xlink': 'http://buttgenerator.com'},
-#        {'value': (datetime(2015, 1, 26, 13, 42, 42), 1),
-#         'label': 'annoying',
-#         'xlink': 'http://buttgenerator.com'}]
-#datey.add('annoying', data)
-#
-#data = [{'value': (datetime(2015, 1, 26, 23, 13, 0), 2),
-#         'label': 'hateful',
-#         'xlink':
-#         'http://art.penny-arcade.com/photos/215499488_8pSZr/0/1050x10000/215499488_8pSZr-1050x10000.jpg'},
-#        {'value': (datetime(2015, 1, 25, 10, 35, 35), 2),
-#         'label': 'hateful',
-#         'xlink': 'http://art.penny-arcade.com/photos/215499488_8pSZr/0/1050x10000/215499488_8pSZr-1050x10000.jpg'}]
-#datey.add('hateful', data)
-#
-#data = [{'value': (datetime(2015, 1, 25, 12, 0, 0), 3),
-#         'label': 'dirty',
-#         'xlink': 'http://jamesgunn.com/pg-porn'},
-#        {'value': (datetime(2015, 1, 27, 17, 12, 12), 3),
-#         'label': 'dirty',
-#         'xlink': 'http://jamesgunn.com/pg-porn'}]
-#datey.add('dirty', data)
-#
-#with open('butts','w') as f:
-#    f.write(datey.render())
