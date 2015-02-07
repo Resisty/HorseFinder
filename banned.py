@@ -7,36 +7,38 @@
 #
 #  Creation Date : 14-01-2015
 #
-#  Last Modified : Mon 26 Jan 2015 03:32:19 PM CST
+#  Last Modified : Sat 07 Feb 2015 12:32:13 AM CST
 #
 #  Created By : Brian Auron
 #
 # ========================================
 
 annoying = ['my little pony',
-            'mylittlepony',
-            'dark horse',
-            'darkhorse']
+            ' mylittlepony ',
+            ' ebay ',
+            ' gekoo ',
+            ' dark horse ',
+            ' darkhorse ']
 
-hateful = ['nigger',
-           'nigga',
-           'spic',
-           'wetback',
-           'wet[\s]*back',
-           'gook',
-           'kike',
-           'sand[\s]*nigger',
-           'dyke',
-           'rape',
-           'faggot']
+hateful = [' nigger ',
+           ' nigga ',
+           ' spic ',
+           ' wetback ',
+           ' wet[\s]*back ',
+           ' gook ',
+           ' kike ',
+           ' sand[\s]*nigger ',
+           ' dyke ',
+           ' rape ',
+           ' faggot ']
 
-dirty = ['penis',
-         'cock',
-         'hung like a horse',
-         'hung like horse',
-         'riding like a horse',
-         'hung[\s-]*horse',
-         'dick',
-         'fucking a horse',
-         'sex',
-         "gentlem[ea]n(\'?s)? club"]
+dirty = [' penis ',
+         ' cock ',
+         ' hung like a horse ',
+         ' hung like horse ',
+         ' riding like a horse ',
+         ' hung[\s-]*horse ',
+         ' dick ',
+         ' fucking a horse ',
+         ' sex ',
+         " gentlem[ea]n(\'?s)? club "]

@@ -1,4 +1,5 @@
 *.db
+*.svg
 *.pyc
 *.log
 credentials.py

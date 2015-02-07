@@ -7,7 +7,7 @@
 #
 #  Creation Date : 15-01-2015
 #
-#  Last Modified : Fri 23 Jan 2015 10:56:36 AM CST
+#  Last Modified : Wed 04 Feb 2015 01:21:07 PM CST
 #
 #  Created By : Brian Auron
 #
@@ -146,10 +146,12 @@ def main():
                           consumer['secret'],
                           access['key'],
                           access['secret'])
-    horses.statuses.filter(track='horse,horsefacts')
-    horsethread = Thread(target = horses.statuses.filter, args = ('horse',))
-    horsethread.daemon = True
-    horsethread.start()
+    while True:
+        try:
+            horses.statuses.filter(track='horse,horsefacts')
+        except Exception as e:
+            logging.error('HorseTweeter failed: {0}'.format(e))
+            continue
 
 if __name__ == '__main__':
     main()
