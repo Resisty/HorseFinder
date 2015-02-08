@@ -7,38 +7,39 @@
 #
 #  Creation Date : 14-01-2015
 #
-#  Last Modified : Sat 07 Feb 2015 12:32:13 AM CST
+#  Last Modified : Sun 08 Feb 2015 04:54:52 PM CST
 #
 #  Created By : Brian Auron
 #
 # ========================================
 
-annoying = ['my little pony',
-            ' mylittlepony ',
-            ' ebay ',
-            ' gekoo ',
-            ' dark horse ',
-            ' darkhorse ']
+annoying = ['my[\s-]*little[\s-]*pony',
+            'ebay',
+            'gekoo',
+            'high[\s-]*horse',
+            'dark[\s-]*horse']
+annoying = ['[\'"]*{0}[\'"]*'.format(i) for i in annoying]
 
-hateful = [' nigger ',
-           ' nigga ',
-           ' spic ',
-           ' wetback ',
-           ' wet[\s]*back ',
-           ' gook ',
-           ' kike ',
-           ' sand[\s]*nigger ',
-           ' dyke ',
-           ' rape ',
-           ' faggot ']
+hateful = ['nigger',
+           'nigga',
+           'spic',
+           'wet[\s-]*back',
+           'gook',
+           'kike',
+           'sand[\s-]*nigger',
+           'dyke',
+           'rape',
+           'faggot']
+hateful = ['[\'"]*{0}[\'"]*'.format(i) for i in hateful]
 
-dirty = [' penis ',
-         ' cock ',
-         ' hung like a horse ',
-         ' hung like horse ',
-         ' riding like a horse ',
-         ' hung[\s-]*horse ',
-         ' dick ',
-         ' fucking a horse ',
-         ' sex ',
-         " gentlem[ea]n(\'?s)? club "]
+dirty = ['penis',
+         'cock',
+         'hung[\s-]*like[\s-]*a[\s-]*horse',
+         'hung[\s-]*like[\s-]*horse',
+         'riding[\s-]*like[\s-]*a[\s-]*horse',
+         'hung[\s-]*horse',
+         'dick',
+         'fucking[\s-]*a[\s-]*horse',
+         'sex',
+         'gentlem[ea]n(\'?s)?[\s-]*club']
+dirty = ['[\'"]*{0}[\'"]*'.format(i) for i in dirty]
