@@ -7,7 +7,7 @@
 #
 #  Creation Date : 14-01-2015
 #
-#  Last Modified : Mon 09 Feb 2015 12:29:37 AM CST
+#  Last Modified : Mon 09 Feb 2015 12:56:51 AM CST
 #
 #  Created By : Brian Auron
 #
@@ -20,6 +20,7 @@ reg_punc = re.escape(punctuation)
 annoying = ['my[\s-]*little[\s-]*pony',
             'ebay',
             'gekoo',
+            'charl(ie|ey)[\s-]*horse',
             'high[\s-]*horse',
             'dark[\s-]*horse']
 annoying = ['[\s{0}]*{1}([\s{2}]+|$)'.format(reg_punc, i, reg_punc) for i in annoying]
@@ -38,8 +39,7 @@ hateful = ['[\s{0}]*{1}([\s{2}]+|$)'.format(reg_punc, i, reg_punc) for i in hate
 
 dirty = ['penis',
          'cock',
-         'hung[\s-]*like[\s-]*a[\s-]*horse',
-         'hung[\s-]*like[\s-]*horse',
+         'hung',
          'riding[\s-]*like[\s-]*a[\s-]*horse',
          'hung[\s-]*horse',
          'dick',
