@@ -7,7 +7,7 @@
 #
 #  Creation Date : 14-01-2015
 #
-#  Last Modified : Mon 09 Feb 2015 12:56:51 AM CST
+#  Last Modified : Mon 09 Feb 2015 11:56:00 AM CST
 #
 #  Created By : Brian Auron
 #
@@ -23,7 +23,7 @@ annoying = ['my[\s-]*little[\s-]*pony',
             'charl(ie|ey)[\s-]*horse',
             'high[\s-]*horse',
             'dark[\s-]*horse']
-annoying = ['[\s{0}]*{1}([\s{2}]+|$)'.format(reg_punc, i, reg_punc) for i in annoying]
+annoying = ['[\s{0}]*{1}([\s{2}]*|$)'.format(reg_punc, i, reg_punc) for i in annoying]
 
 hateful = ['nigger',
            'nigga',
@@ -41,7 +41,7 @@ dirty = ['penis',
          'cock',
          'hung',
          'riding[\s-]*like[\s-]*a[\s-]*horse',
-         'hung[\s-]*horse',
+         'hung',
          'dick',
          'fucking[\s-]*a[\s-]*horse',
          'sex',
