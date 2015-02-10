@@ -7,7 +7,7 @@
 #
 #  Creation Date : 14-01-2015
 #
-#  Last Modified : Mon 09 Feb 2015 02:03:03 PM CST
+#  Last Modified : Tue 10 Feb 2015 10:51:52 AM CST
 #
 #  Created By : Brian Auron
 #
@@ -44,6 +44,7 @@ dirty = ['penis',
          'hung',
          'dick',
          'fucking[\s-]*a[\s-]*horse',
-         'sex',
+         'sex(x)*(y)*',
+         'bestiality',
          'gentlem[ea]n(\'?s)?[\s-]*club']
 dirty = ['[^\w]+{0}([^\w]+|$)'.format(reg_punc, i, reg_punc) for i in dirty]

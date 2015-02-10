@@ -7,7 +7,7 @@
 #
 #  Creation Date : 15-01-2015
 #
-#  Last Modified : Wed 04 Feb 2015 01:21:07 PM CST
+#  Last Modified : Tue 10 Feb 2015 02:13:09 PM CST
 #
 #  Created By : Brian Auron
 #
@@ -34,13 +34,14 @@ hateful_re = re.compile('|'.join(hateful), re.IGNORECASE)
 dirty_re = re.compile('|'.join(dirty), re.IGNORECASE)
 
 def has_banned_word(tweet):
+    searchtext = json.dumps(tweet).encode('utf-8')
     text = tweet['text'].encode('utf-8')
     status = tweet['id']
     user = tweet['user']['screen_name'].encode('utf-8')
     now = datetime.now().strftime("%F %T")
-    annoying_text = annoying_re.search(text)
-    hateful_text = hateful_re.search(text)
-    dirty_text = dirty_re.search(text)
+    annoying_text = annoying_re.search(searchtext)
+    hateful_text = hateful_re.search(searchtext)
+    dirty_text = dirty_re.search(searchtext)
     try:
         db.connect()
         if annoying_text:
