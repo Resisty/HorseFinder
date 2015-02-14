@@ -7,7 +7,7 @@
 #
 #  Creation Date : 14-01-2015
 #
-#  Last Modified : Fri 13 Feb 2015 08:10:43 PM CST
+#  Last Modified : Sat 14 Feb 2015 12:22:36 PM CST
 #
 #  Created By : Brian Auron
 #
@@ -40,7 +40,9 @@ hateful = ['[^\w]+{0}([^\w]+|$)'.format(i) for i in hateful]
 dirty = ['penis',
          'cock',
          'hung',
-         'riding[\s-]*like[\s-]*a[\s-]*horse',
+         'rid(es|e|ing)',
+         'rode(|s)',
+         'ridden',
          'hung',
          'dick',
          'virgin(|s|ity|ities)',
@@ -50,4 +52,4 @@ dirty = ['penis',
          'sex(x)*(y)*',
          'bestiality',
          'gentlem[ea]n(\'?s)?[\s-]*club']
-dirty = ['[^\w]+{0}([^\w]+|$)'.format(reg_punc, i, reg_punc) for i in dirty]
+dirty = ['[^\w]+{0}([^\w]+|$)'.format(i) for i in dirty]
