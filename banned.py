@@ -7,7 +7,7 @@
 #
 #  Creation Date : 14-01-2015
 #
-#  Last Modified : Sat 14 Feb 2015 12:22:36 PM CST
+#  Last Modified : Fri 20 Feb 2015 04:55:46 PM CST
 #
 #  Created By : Brian Auron
 #
@@ -44,7 +44,7 @@ dirty = ['penis',
          'rode(|s)',
          'ridden',
          'hung',
-         'dick',
+         'dick(|s)',
          'virgin(|s|ity|ities)',
          'hentai',
          'ecchi',
