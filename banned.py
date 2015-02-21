@@ -7,7 +7,7 @@
 #
 #  Creation Date : 14-01-2015
 #
-#  Last Modified : Fri 20 Feb 2015 04:55:46 PM CST
+#  Last Modified : Fri 20 Feb 2015 07:49:54 PM CST
 #
 #  Created By : Brian Auron
 #
@@ -20,6 +20,7 @@ reg_punc = re.escape(punctuation)
 annoying = ['my[\s-]*little[\s-]*pony',
             'ebay',
             'gekoo',
+            'bron(ie|y|ey)(|s)',
             'charl(ie|ey)[\s-]*horse',
             'high[\s-]*horse',
             'dark[\s-]*horse']
@@ -43,6 +44,7 @@ dirty = ['penis',
          'rid(es|e|ing)',
          'rode(|s)',
          'ridden',
+         'jack(|s)[\s-]*off',
          'hung',
          'dick(|s)',
          'virgin(|s|ity|ities)',
