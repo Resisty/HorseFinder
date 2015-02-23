@@ -7,7 +7,7 @@
 #
 #  Creation Date : 14-01-2015
 #
-#  Last Modified : Mon 23 Feb 2015 10:50:31 AM CST
+#  Last Modified : Mon 23 Feb 2015 10:51:46 AM CST
 #
 #  Created By : Brian Auron
 #
@@ -20,6 +20,7 @@ reg_punc = re.escape(punctuation)
 annoying = ['my[\s-]*little[\s-]*pony',
             'ebay',
             'gekoo',
+            'etsy',
             'horse[\s-]*radish',
             'bron(ie|y|ey)(|s)',
             'charl(ie|ey)[\s-]*horse',
