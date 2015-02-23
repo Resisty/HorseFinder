@@ -7,7 +7,7 @@
 #
 #  Creation Date : 21-01-2015
 #
-#  Last Modified : Fri 23 Jan 2015 11:24:59 AM CST
+#  Last Modified : Sun 22 Feb 2015 07:32:15 PM CST
 #
 #  Created By : Brian Auron
 #
@@ -15,7 +15,17 @@
 
 from peewee import *
 
-db = SqliteDatabase('horsedata.db')
+bannedDB = SqliteDatabase('banned.db')
+retweetDB = SqliteDatabase('retweet.db')
+
+class Retweets(Model):
+    tweettext = TextField()
+    tweeter = TextField()
+    status = TextField()
+    datetime = DateTimeField()
+
+    class Meta:
+        database = retweetDB
 
 class Banned(Model):
     flavor = CharField()
@@ -26,8 +36,12 @@ class Banned(Model):
     datetime = DateTimeField()
 
     class Meta:
-        database = db
+        database = bannedDB
 
-def create_tables():
-    db.connect()
-    db.create_tables([Banned])
+def create_banned():
+    bannedDB.connect()
+    bannedDB.create_tables([Banned])
+
+def create_retweet():
+    retweetDB.connect()
+    retweetDB.create_tables([Retweets])

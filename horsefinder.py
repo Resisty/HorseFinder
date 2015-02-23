@@ -7,7 +7,7 @@
 #
 #  Creation Date : 15-01-2015
 #
-#  Last Modified : Tue 10 Feb 2015 02:13:09 PM CST
+#  Last Modified : Sun 22 Feb 2015 07:38:55 PM CST
 #
 #  Created By : Brian Auron
 #
@@ -18,17 +18,19 @@ import re
 import json
 import sys
 import signal
+import traceback
 from datetime import datetime
-from horsedata import Banned, db
+from horsedata import Banned, Retweets, bannedDB, retweetDB
 from banned import annoying, hateful, dirty
 from time import sleep
 from twython import Twython, TwythonStreamer
 from credentials import consumer, access
 from threading import Thread
+from difflib import SequenceMatcher
 
 logging.basicConfig(filename='horsefinder.log',
                     format='[%(asctime)s] [%(levelname)s] %(message)s',
-                    level=logging.DEBUG)
+                    level=logging.INFO)
 annoying_re = re.compile('|'.join(annoying), re.IGNORECASE)
 hateful_re = re.compile('|'.join(hateful), re.IGNORECASE)
 dirty_re = re.compile('|'.join(dirty), re.IGNORECASE)
@@ -43,7 +45,7 @@ def has_banned_word(tweet):
     hateful_text = hateful_re.search(searchtext)
     dirty_text = dirty_re.search(searchtext)
     try:
-        db.connect()
+        bannedDB.connect()
         if annoying_text:
             Banned.insert(flavor='annoying',
                           trigger=annoying_text.group(),
@@ -65,13 +67,41 @@ def has_banned_word(tweet):
                           tweeter=user,
                           status=status,
                           datetime=now).execute()
-        db.close()
+        bannedDB.close()
     except Exception as e:
         logging.info('Could not use db: {0}'.format(e))
 
     if any([annoying_text, hateful_text, dirty_text]):
         return True
     return False
+
+def is_retweet(tweet):
+    text = tweet['text'].encode('utf-8')
+    status = tweet['id']
+    user = tweet['user']['screen_name'].encode('utf-8')
+    now = datetime.now().strftime("%F %T")
+    retweetDB.connect()
+    select = Retweets.select()
+    matches = []
+    for i in select:
+        match = SequenceMatcher(None, text, i.tweettext)
+        if match.ratio > .9:
+            matches.append(i.tweettext)
+    retweetDB.close()
+    return matches
+
+def store_retweet(tweet):
+    text = tweet['text'].encode('utf-8')
+    status = tweet['id']
+    user = tweet['user']['screen_name'].encode('utf-8')
+    now = datetime.now().strftime("%F %T")
+    retweetDB.connect()
+    Retweets.insert(tweettext = text,
+                    tweeter = user,
+                    status = status,
+                    datetime = now).execute()
+    retweetDB.close()
+
 
 def getTwitter():
     twitter = Twython(consumer['key'],
@@ -87,13 +117,29 @@ class HorseTweeter(TwythonStreamer):
             text = data['text'].encode('utf-8')
             if has_banned_word(data):
                 logging.info('HorseTweeter found a bad word in some text: "{0}"'.format(text))
-            else:
-                try:
-                    logging.info('HorseTweeter trying to retweet found horse id: {0}'.format(data['id']))
-                    getTwitter().retweet(id = data['id'])
-                    sleep(1800)
-                except Exception as e:
-                    logging.error('HorseTweeter could not retweet found horse, error: {0}'.format(e))
+                return
+
+            rts = is_retweet(data)
+            if rts:
+                logging.info('HorseTweeter found a duplicate of an earlier retweet: {0} :: {1}'.format(text, rts))
+                return
+
+            retweeted = True
+            try:
+                logging.info('HorseTweeter trying to retweet found horse id: {0}'.format(data['id']))
+                getTwitter().retweet(id = data['id'])
+            except Exception as e:
+                logging.error('HorseTweeter could not retweet found horse, error: {0}'.format(e))
+                retweeted = False
+
+            try:
+                store_retweet(data)
+            except Exception as e:
+                logging.error('Could not store retweet in db: {0}'.format(e))
+
+            if retweeted:
+                logging.info('About to sleep for 10 minutes')
+                sleep(600)
 
     def on_error(self, status_code, data):
         logging.error('HorseTweeter twitter error code: {0}'.format(status_code))
@@ -125,10 +171,20 @@ class MessageStreamer(TwythonStreamer):
                 logging.info('MessageStreamer found a bad word in some text: "{0}"'.format(text))
                 return
             logging.info('MessageStreamer trying to retweet status: {0}'.format(status))
+
+            rts = is_retweet(data)
+            if rt:
+                logging.info('HorseTweeter found a duplicate of an earlier retweet: {0} :: {1}'.format(text, rts))
+                return
+
             try:
                 getTwitter().retweet(id = status)
             except Exception as e:
                 logging.error('MessageStreamer could not retweet from DM: {0}'.format(e))
+            try:
+                store_retweet(data)
+            except Exception as e:
+                logging.error('Could not store retweet in db: {0}'.format(e))
 
 
     def on_error(self, status_code, data):
@@ -151,6 +207,7 @@ def main():
         try:
             horses.statuses.filter(track='horse,horsefacts')
         except Exception as e:
+            print traceback.format_exc()
             logging.error('HorseTweeter failed: {0}'.format(e))
             continue
 
