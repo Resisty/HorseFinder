@@ -7,7 +7,7 @@
 #
 #  Creation Date : 15-01-2015
 #
-#  Last Modified : Sun 22 Feb 2015 07:38:55 PM CST
+#  Last Modified : Sun 22 Feb 2015 09:00:21 PM CST
 #
 #  Created By : Brian Auron
 #
@@ -85,7 +85,7 @@ def is_retweet(tweet):
     matches = []
     for i in select:
         match = SequenceMatcher(None, text, i.tweettext)
-        if match.ratio > .9:
+        if match.ratio() > .9:
             matches.append(i.tweettext)
     retweetDB.close()
     return matches
