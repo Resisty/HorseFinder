@@ -7,7 +7,7 @@
 #
 #  Creation Date : 14-01-2015
 #
-#  Last Modified : Sun 22 Feb 2015 09:13:58 PM CST
+#  Last Modified : Mon 23 Feb 2015 10:50:31 AM CST
 #
 #  Created By : Brian Auron
 #
@@ -41,6 +41,7 @@ hateful = ['[^\w]+{0}([^\w]+|$)'.format(i) for i in hateful]
 
 dirty = ['penis',
          'cock',
+         'climax(|es)',
          'vagina',
          'hung',
          'rid(es|e|ing)',
