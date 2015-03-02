@@ -7,7 +7,7 @@
 #
 #  Creation Date : 15-01-2015
 #
-#  Last Modified : Sun 01 Mar 2015 07:34:22 PM CST
+#  Last Modified : Sun 01 Mar 2015 11:55:24 PM CST
 #
 #  Created By : Brian Auron
 #
@@ -150,6 +150,10 @@ def is_retweet(tweet):
     status = tweet['id']
     user = tweet['user']['screen_name'].encode('utf-8')
     now = datetime.now().strftime("%F %T")
+    try:
+        media = tweet['extended_entities']['media'][0]['expanded_url']
+    except:
+        media = ''
     retweetDB.connect()
     select = Retweets.select()
     matches = []
@@ -157,11 +161,17 @@ def is_retweet(tweet):
         match = partial_ratio(text, i.tweettext)
         if match >= 81:
             matches.append(i.tweettext)
+        if media != '' and media == i.media:
+            matches.append(i.media)
     retweetDB.close()
     return matches
 
 def store_retweet(tweet):
     text = tweet['text'].encode('utf-8')
+    try:
+        media = tweet['extended_entities']['media'][0]['expanded_url']
+    except:
+        media = ''
     status = tweet['id']
     user = tweet['user']['screen_name'].encode('utf-8')
     now = datetime.now().strftime("%F %T")
@@ -169,6 +179,7 @@ def store_retweet(tweet):
     Retweets.insert(tweettext = text,
                     tweeter = user,
                     status = status,
+                    media = media,
                     datetime = now).execute()
     retweetDB.close()
 

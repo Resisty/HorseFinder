@@ -7,7 +7,7 @@
 #
 #  Creation Date : 21-01-2015
 #
-#  Last Modified : Sun 22 Feb 2015 07:32:15 PM CST
+#  Last Modified : Sun 01 Mar 2015 11:49:12 PM CST
 #
 #  Created By : Brian Auron
 #
@@ -23,6 +23,7 @@ class Retweets(Model):
     tweeter = TextField()
     status = TextField()
     datetime = DateTimeField()
+    media = TextField()
 
     class Meta:
         database = retweetDB
