@@ -7,7 +7,7 @@
 #
 #  Creation Date : 15-01-2015
 #
-#  Last Modified : Tue 24 Feb 2015 02:37:35 PM CST
+#  Last Modified : Sun 01 Mar 2015 07:17:53 PM CST
 #
 #  Created By : Brian Auron
 #
@@ -98,7 +98,7 @@ def has_banned_word(tweet):
     except Exception as e:
         logging.info('Could not use db: {0}'.format(e))
 
-    if any([annoying_text, hateful_text, dirty_text]):
+    if any([annoying_text, hateful_text, dirty_text, annoying_tweet, hateful_tweet, dirty_tweet]):
         return True
     return False
 
