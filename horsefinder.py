@@ -7,7 +7,7 @@
 #
 #  Creation Date : 15-01-2015
 #
-#  Last Modified : Sun 01 Mar 2015 07:17:53 PM CST
+#  Last Modified : Sun 01 Mar 2015 07:34:22 PM CST
 #
 #  Created By : Brian Auron
 #
@@ -155,7 +155,7 @@ def is_retweet(tweet):
     matches = []
     for i in select:
         match = partial_ratio(text, i.tweettext)
-        if match >= 69:
+        if match >= 81:
             matches.append(i.tweettext)
     retweetDB.close()
     return matches
