@@ -7,7 +7,7 @@
 #
 #  Creation Date : 15-01-2015
 #
-#  Last Modified : Sun 01 Mar 2015 11:55:24 PM CST
+#  Last Modified : Mon 02 Mar 2015 12:14:44 PM CST
 #
 #  Created By : Brian Auron
 #
@@ -198,7 +198,7 @@ class HorseTweeter(TwythonStreamer):
 
     def on_success(self, data):
         delta = datetime.now() - self.lastTweetTime
-        if delta.seconds < 600:
+        if delta.seconds < 3600:
             return
 
         if 'text' in data:
