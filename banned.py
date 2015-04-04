@@ -7,7 +7,7 @@
 #
 #  Creation Date : 14-01-2015
 #
-#  Last Modified : Sat 04 Apr 2015 12:44:01 AM CDT
+#  Last Modified : Sat 04 Apr 2015 10:18:09 AM CDT
 #
 #  Created By : Brian Auron
 #
@@ -57,6 +57,7 @@ dirty = ['penis(|es)',
          'virgin(|s|ity|ities)',
          'hentai',
          'ecchi',
+         'fuck(|s|er|ers|ing)',
          'fucking[\s-]*a[\s-]*horse',
          'sex(x)*(y)*',
          'bestiality',
