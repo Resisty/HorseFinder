@@ -7,7 +7,7 @@
 #
 #  Creation Date : 14-01-2015
 #
-#  Last Modified : Mon 02 Mar 2015 02:44:18 PM CST
+#  Last Modified : Sat 04 Apr 2015 12:44:01 AM CDT
 #
 #  Created By : Brian Auron
 #
@@ -40,7 +40,7 @@ hateful = ['nigger',
            'faggot']
 hateful = ['([^\w]+|^){0}([^\w]+|$)'.format(i) for i in hateful]
 
-dirty = ['penis',
+dirty = ['penis(|es)',
          'cock',
          'climax(|es)',
          'vagina',
