@@ -1,0 +1,52 @@
+body {
+  background-color: white;
+}
+
+#identinfo h1 {
+  text-align: center;
+  color: grey;
+}
+
+#links > ul {
+  float: right;
+}
+
+#links > ul > li {
+  padding-left: 4px;
+  display: inline;
+}
+
+#links > ul > li > a {
+  color: orange;
+}
+
+#identinfo ul {
+  text-align: center;
+}
+
+#identinfo ul li {
+  display: inline;
+}
+
+#title-announce {
+    text-align: center;
+}
+
+h2 {
+  font-size: 24px;
+  font-weight: bold;
+}
+h3 {
+  font-size: 20px;
+}
+h4 {
+  font-size: 16px;
+}
+
+#identinfo ul, #links ul {
+  list-style-type: none;
+}
+
+li {
+	margin: 0px;
+}
