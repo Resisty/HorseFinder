@@ -7,7 +7,7 @@
 #
 #  Creation Date : 15-01-2015
 #
-#  Last Modified : Mon 02 Mar 2015 12:14:44 PM CST
+#  Last Modified : Fri 03 Apr 2015 12:21:50 PM CDT
 #
 #  Created By : Brian Auron
 #
@@ -58,6 +58,15 @@ def has_banned_word(tweet):
                           tweeter=user,
                           status=status,
                           datetime=now).execute()
+
+        elif annoying_text:
+            Banned.insert(flavor='annoying',
+                          trigger=annoying_text.group(),
+                          tweettext=text,
+                          tweeter=user,
+                          status=status,
+                          datetime=now).execute()
+
         if hateful_tweet:
             Banned.insert(flavor='hateful',
                           trigger=hateful_tweet.group(),
@@ -65,6 +74,15 @@ def has_banned_word(tweet):
                           tweeter=user,
                           status=status,
                           datetime=now).execute()
+
+        elif hateful_text:
+            Banned.insert(flavor='hateful',
+                          trigger=hateful_text.group(),
+                          tweettext=text,
+                          tweeter=user,
+                          status=status,
+                          datetime=now).execute()
+
         if dirty_tweet:
             Banned.insert(flavor='dirty',
                           trigger=dirty_tweet.group(),
@@ -73,21 +91,7 @@ def has_banned_word(tweet):
                           status=status,
                           datetime=now).execute()
 
-        if annoying_text:
-            Banned.insert(flavor='annoying',
-                          trigger=annoying_text.group(),
-                          tweettext=text,
-                          tweeter=user,
-                          status=status,
-                          datetime=now).execute()
-        if hateful_text:
-            Banned.insert(flavor='hateful',
-                          trigger=hateful_text.group(),
-                          tweettext=text,
-                          tweeter=user,
-                          status=status,
-                          datetime=now).execute()
-        if dirty_text:
+        elif dirty_text:
             Banned.insert(flavor='dirty',
                           trigger=dirty_text.group(),
                           tweettext=text,

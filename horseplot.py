@@ -20,22 +20,36 @@
 # Data collector/collator function for putting into DateY graph
 
 import pygal
-from horsedata import Banned, db
+import codecs
+from pygal.style import Style
+from horsedata import Banned, bannedDB as db
 from datetime import datetime, timedelta
 import logging
 from random import randint
+import traceback
 
 logging.basicConfig(filename='horseplot.log',
                     format='[%(asctime)s] [%(levelname)s] %(message)s',
                     level=logging.DEBUG)
 
-def pull_data():
+def pull_data(since = None, until = None):
+    if not since:
+        since = datetime.today() - timedelta(2)
+    if not until:
+        until = datetime.now()
+    if since > until:
+        tmp = since
+        since = until
+        until = since
     db.connect()
     select = Banned.select()
     flavor_select = Banned.select(Banned.flavor).distinct()
     data_by_flavor = {}
     for i in flavor_select:
-        data_by_flavor[i.flavor] = select.where(Banned.flavor == i.flavor)
+        data_by_flavor[i.flavor] = select.where(
+            (Banned.flavor == i.flavor) &
+            (Banned.datetime > since) &
+            (Banned.datetime < until))
 
     return data_by_flavor
 
@@ -66,18 +80,40 @@ def pygal_dateyify(select):
     return data
 
 
-def main():
-    data_by_flavor = pull_data()
-    datey = pygal.DateY(x_label_rotation=20,
-                        title = 'Piecewise Trends of Filtered Tweets Over Time',
-                        x_title = 'Datetime',
-                        include_x_axis = True)
-    datey.x_labels = x_label_datetime3([i for j in data_by_flavor.values() for i in j])
-    for flavor, flavor_data in data_by_flavor.iteritems():
-        pygal_data = pygal_dateyify(flavor_data)
-        datey.add(flavor, pygal_data)
+def make_datey(since = None, until = None):
+    try:
+        data_by_flavor = pull_data(since, until)
+        custom_style = Style(
+            background='transparent',
+            plot_background='transparent',
+            foreground='#000000',
+            foreground_light='#585858',
+            foreground_dark='#383838',
+            opacity='.6',
+            opacity_hover='.9',
+            transition='400ms ease-in',
+            colors=('#FF6600', '#9900CC', '#FF66FF'))
 
-    with open('horseplot.svg', 'w') as f:
+        datey = pygal.DateY(x_label_rotation=20,
+                            title = 'Piecewise Trends of Filtered Tweets Over Time',
+                            x_title = 'Datetime',
+                            include_x_axis = True,
+                            print_values = False,
+                            disable_xml_declaration = True,
+                            style = custom_style)
+        datey.x_labels = x_label_datetime3([i for j in data_by_flavor.values() for i in j])
+        for flavor, flavor_data in data_by_flavor.iteritems():
+            pygal_data = pygal_dateyify(flavor_data)
+            datey.add(flavor, pygal_data)
+    except:
+        print traceback.format_exc()
+        return ''
+
+    return datey
+
+def main():
+    datey = make_datey()
+    with codecs.open('horseplot.svg', 'w') as f:
         f.write(datey.render())
     print "Wrote out data"
 

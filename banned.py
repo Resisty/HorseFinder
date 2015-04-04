@@ -7,7 +7,7 @@
 #
 #  Creation Date : 14-01-2015
 #
-#  Last Modified : Sun 01 Mar 2015 11:07:15 AM CST
+#  Last Modified : Mon 02 Mar 2015 02:44:18 PM CST
 #
 #  Created By : Brian Auron
 #
@@ -50,6 +50,9 @@ dirty = ['penis',
          'ridden',
          'jack(|s)[\s-]*off',
          'hung',
+         'cleavage',
+         'choke',
+         'drown',
          'dick(|s)',
          'virgin(|s|ity|ities)',
          'hentai',

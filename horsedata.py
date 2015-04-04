@@ -7,16 +7,18 @@
 #
 #  Creation Date : 21-01-2015
 #
-#  Last Modified : Sun 01 Mar 2015 11:49:12 PM CST
+#  Last Modified : Fri 03 Apr 2015 10:09:54 PM CDT
 #
 #  Created By : Brian Auron
 #
 # ========================================
 
 from peewee import *
+import os
+dbdir = os.path.dirname(os.path.realpath(__file__))
 
-bannedDB = SqliteDatabase('banned.db')
-retweetDB = SqliteDatabase('retweet.db')
+bannedDB = SqliteDatabase(os.path.join(dbdir, 'banned.db'))
+retweetDB = SqliteDatabase(os.path.join(dbdir, 'retweet.db'))
 
 class Retweets(Model):
     tweettext = TextField()
