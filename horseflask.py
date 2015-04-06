@@ -38,32 +38,45 @@ def page_not_found_500(e):
         return ('Well met!'), 500
     return send_from_directory(img_dir, 'wellmet.png'), 500
 
-@app.route('/', methods=['GET'])
-def horseplot():
+@app.route('/stats', methods=['GET'])
+def horsestats():
     try:
         since = request.args.get('since')
-        print since
     except:
         since = None
-        print 'No since data in request'
     try:
         until = request.args.get('until')
-        print until
     except:
         until = None
-        print 'No until data in request'
     try:
         since = datetime.strptime(since, "%Y-%m-%d")
     except:
-        print 'Unable to strptime since'
         since = None
     try:
         until = datetime.strptime(until, "%Y-%m-%d")
     except:
-        print 'Unable to strptime until'
         until = None
-    print since
-    print until
+    data = pull_stats(since, until)
+    return jsonify(data)
+
+@app.route('/', methods=['GET'])
+def horseplot():
+    try:
+        since = request.args.get('since')
+    except:
+        since = None
+    try:
+        until = request.args.get('until')
+    except:
+        until = None
+    try:
+        since = datetime.strptime(since, "%Y-%m-%d")
+    except:
+        since = None
+    try:
+        until = datetime.strptime(until, "%Y-%m-%d")
+    except:
+        until = None
     horseplot = make_datey(since, until)
     return horseplot.render()
 

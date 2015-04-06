@@ -34,7 +34,7 @@ logging.basicConfig(filename='horseplot.log',
 
 def pull_data(since = None, until = None):
     if not since:
-        since = datetime.today() - timedelta(2)
+        since = datetime.today() - timedelta(3)
     if not until:
         until = datetime.now()
     if since > until:
@@ -54,14 +54,21 @@ def pull_data(since = None, until = None):
     return data_by_flavor
 
 def x_label_datetime3(rows):
-    maxdate = max([i.datetime for i in rows])
-    mindate = min([i.datetime for i in rows])
-    halfway = (maxdate - mindate) / 2 + mindate
+    try:
+        maxdate = max([i.datetime for i in rows])
+        mindate = min([i.datetime for i in rows])
+        halfway = (maxdate - mindate) / 2 + mindate
+    except ValueError:
+        maxdate, mindate, halfway = ('Error: Bad date range' for i in range(3))
     return [mindate, halfway, maxdate]
 
 
 def pygal_dateyify(select):
-    flavor = select.get().flavor
+    try:
+        flavor = select.get().flavor
+    except:
+        print 'Empty select!'
+        return []
     try:
         assert all([i.flavor == flavor for i in select])
     except Exception:
@@ -110,6 +117,37 @@ def make_datey(since = None, until = None):
         return ''
 
     return datey
+
+def pull_stats(since = None, until = None):
+    if not since:
+        since = datetime.today() - timedelta(3)
+    if not until:
+        until = datetime.now()
+    if since > until:
+        tmp = since
+        since = until
+        until = since
+    data_by_flavor = pull_data(since, until)
+    def colors():
+        for i in ('#FF9933', '#9933FF', '#FFCCFF'):
+            yield i
+    color = colors()
+    data = {}
+    try:
+        for flavor, select in data_by_flavor.iteritems():
+            data[flavor] = {}
+            data[flavor]['count'] = select.count()
+            data[flavor]['color'] = color.next()
+            diff = until - since
+            hours = diff.days * 24 + diff.seconds / 3600.0
+            try:
+                hourly = data[flavor]['count'] / hours
+                data[flavor]['hourly'] = '{0:.3}'.format(hourly)
+            except ZeroDivisionError:
+                data[flavor]['hourly'] = 0.0
+        return data
+    except:
+        print traceback.format_exc()
 
 def main():
     datey = make_datey()

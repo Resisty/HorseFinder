@@ -5,8 +5,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@HorseFinderBot WIP - brianauron.info</title>
-    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Include Required Prerequisites -->
+    <script type="text/javascript" src="//cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/2.9.0/moment.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap/3.3.2/css/bootstrap.css" />
     <link rel='stylesheet' href='style.css'>
+     
+    <!-- Include Date Range Picker -->
+    <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker-bs3.css" />
+    <script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/svg.jquery.js"></script>
+    <script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/pygal-tooltips.js"></script>
+    <script type="text/javascript" src="http://rawgit.com/s3rvac/pygal-toggle-graphs/master/pygal-toggle-graphs.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
   </head>
   <body>
     <div class='container'>
@@ -19,12 +31,126 @@
             </ul>
         </div>
       </div>
-      <div id='content'></div>
+      <div id='content'>
+	<h2 class="text-center" id="title-announce" title="psa">
+	Work In Progress - Blog Post and Graph Regarding Twitter Bot Filters
+	</h2>
+	<div class="row">
+	    <div id='svg' class="col-md-9">
+		<figure id='svg-fig'>
+		</figure>
+	    </div>
+	    <div class="row">
+		<div class="col-md-3">
+		    <h3 class="text-center">Simple stats</h3>
+		    <table class="table table-condensed">
+			<thead>
+			    <tr>
+				<td><strong>Category</strong></td>
+				<td><strong>Number</strong></td>
+				<td><strong>Average Per Hour</strong></td>
+			    </tr>
+			</thead>
+			<tbody id='stats'>
+			</tbody>
+		    </table>
+		</div>
+		<div id="reportrange" class="col-md-3" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+		    <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+		    <span></span> <b class="caret"></b>
+		</div>
+		<script>
+		  $(function() {
+		      var data = $.get('/horseplot', function(data) {
+			  $('#svg-fig').html(data);
+			  initPygalToggleGraphs();
+		      });
+		      var stats = $.getJSON('/horseplot/stats', function(data) {
+			  var rows = [];
+			  $.each( data, function( key, val) {
+			      var row = "<tr style=\"background-color:" + val['color'] + "\"><td>" + key + "</td><td>" + val['count'] + "</td><td>" + val['hourly'] + "</td></tr>";
+			      rows.push(row);
+			      });
+			  console.log(rows.join(""));
+			  $('#stats').html(rows.join(""));
+		      });
+		  });
+		</script>
+	    </div>
+	</div>
+      </div>
+     
+    <script type="text/javascript">
+    $(function() {
+     
+	$('#reportrange span').html(moment().subtract(29, 'days').format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+     
+	$('#reportrange').daterangepicker({
+	    format: 'MM/DD/YYYY',
+	    startDate: moment().subtract(29, 'days'),
+	    endDate: moment(),
+	    minDate: '01/01/2012',
+	    maxDate: '12/31/2015',
+	    dateLimit: { days: 60 },
+	    showDropdowns: true,
+	    showWeekNumbers: true,
+	    timePicker: false,
+	    timePickerIncrement: 1,
+	    timePicker12Hour: true,
+	    ranges: {
+	       'Today': [moment(), moment().add(1, 'days')],
+	       'Yesterday': [moment().subtract(1, 'days'), moment()],
+	       'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+	       'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+	       'This Month': [moment().startOf('month'), moment().endOf('month')],
+	       'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+	    },
+	    opens: 'left',
+	    buttonClasses: ['btn', 'btn-sm'],
+	    applyClass: 'btn-primary',
+	    cancelClass: 'btn-default',
+	    separator: ' to ',
+	    locale: {
+		applyLabel: 'Submit',
+		cancelLabel: 'Cancel',
+		fromLabel: 'From',
+		toLabel: 'To',
+		customRangeLabel: 'Custom',
+		daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr','Sa'],
+		monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+		firstDay: 1
+	    }
+	}, function(start, end, label) {
+	    var data = $.get('/horseplot?since=' + start.format('YYYY-MM-DD') + '&until=' + end.format('YYYY-MM-DD'), function(data) {
+		  $('#svg-fig').html(data);
+		  initPygalToggleGraphs();
+		  $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+	      });
+	    var stats = $.getJSON('/horseplot/stats?since=' + start.format('YYYY-MM-DD') + '&until=' + end.format('YYYY-MM-DD'), function(data) {
+	        var rows = [];
+	        $.each( data, function( key, val) {
+	            var row = "<tr style=\"background-color:" + val['color'] + "\"><td>" + key + "</td><td>" + val['count'] + "</td><td>" + val['hourly'] + "</td></tr>";
+	            rows.push(row);
+	            });
+	        $('#stats').html(rows.join(""));
+	    });
+    	    $.getScript('http://kozea.github.com/pygal.js/javascripts/svg.jquery.js');
+    	    $.getScript('http://kozea.github.com/pygal.js/javascripts/pygal-tooltips.js');
+    	    $.getScript('http://rawgit.com/s3rvac/pygal-toggle-graphs/master/pygal-toggle-graphs.js');
+	});
+     
+    });
+    </script>
     </div>
+    <!--
+    <script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/svg.jquery.js"></script>
+    <script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/pygal-tooltips.js"></script>
+    <script type="text/javascript" src="http://rawgit.com/s3rvac/pygal-toggle-graphs/master/pygal-toggle-graphs.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <script>
       $('#content').load('horsefinder.html');
     </script>
+    -->
   </body>
 </html>

@@ -7,7 +7,7 @@
 
 * Creation Date : 2015-04-03
 
-* Last Modified : Fri 03 Apr 2015 09:04:26 PM CDT
+* Last Modified : Sat 04 Apr 2015 11:54:10 AM CDT
 
 * Created By : Brian Auron  
 
@@ -17,8 +17,33 @@
 <h4 class="text-center" id="title-announce" title="psa">
 Work In Progress - Blog Post and Graph Regarding Twitter Bot Filters
 </h4>
+<script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/svg.jquery.js"></script>
+<script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/pygal-tooltips.js"></script>
+<script type="text/javascript" src="http://rawgit.com/s3rvac/pygal-toggle-graphs/master/pygal-toggle-graphs.js"></script>
 <div id='svg'>
-    <figure>
-	<embed type="image/svg+xml" src="/img/horseplot.svg" />
+    <figure id='svg-fig'>
     </figure>
 </div>
+<div class="text-center" id='dates'>
+  <form>
+      <p>THIS CURRENTLY DOES NOT WORK. I'M BAD AT JQUERY.</p>
+      Start Tweeting on (Earliest on 2015-02-01):
+      <input id="since" type="date" name="since" min="2015-02-01">
+      Stop Tweeting on (can leave blank for today):
+      <input id="until" type="date" name="until">
+      <button id="date-submit" type="button">Submit</button>
+  </form>
+</div>
+<script>
+  $('#svg-fig').load('/horseplot');
+</script>
+<script>
+  $('#date-submit').click(function() {
+      var since = $('#since').val()
+      var until = $('#until').val()
+      $('#svg-fig').load('/horseplot?since=' + since + '&until=' + until);
+  });
+  $.getScript('http://kozea.github.com/pygal.js/javascripts/svg.jquery.js');
+  $.getScript('http://kozea.github.com/pygal.js/javascripts/pygal-tooltips.js');
+  $.getScript('http://rawgit.com/s3rvac/pygal-toggle-graphs/master/pygal-toggle-graphs.js');
+</script>

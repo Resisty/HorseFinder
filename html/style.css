@@ -20,6 +20,15 @@ body {
   color: orange;
 }
 
+#dates > ul {
+  float: center;
+}
+
+#dates > ul > li {
+  padding-left: 4px;
+  display: inline;
+}
+
 #identinfo ul {
   text-align: center;
 }
@@ -29,7 +38,7 @@ body {
 }
 
 #title-announce {
-    text-align: center;
+  text-align: center;
 }
 
 h2 {
