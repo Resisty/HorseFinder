@@ -35,6 +35,25 @@
 	<h2 class="text-center" id="title-announce" title="psa">
 	Work In Progress - Blog Post and Graph Regarding Twitter Bot Filters
 	</h2>
+      <div class='jumbotron'>
+	  <p>
+	  Something to aspire to, someday.
+	  </p>
+	  <blockquote>
+We also have a fascination with horses. Our horsefinder bot scours Twitter for
+mentions of horses and relays them to us. As a panic of sysadmins, we have
+standards to which our bots should adhere, however and when we noticed that the
+string "horse" quite often appears co-incidentally with a number of undesirable
+word, we developed a filtering strategy. We group those undesirable  words into
+several categories and filter tweets accordingly. Our results are fourfold:
+first, we discover the undesirable categories which most often mention horses.
+Second, we examine the frequency with which words in each category result in a
+block. Third, we examine additional words beyond the categorical ban marker and
+"horse" that are coincident in the blocked tweet. Finally, we examine the
+desirable horse-related content from our bot.
+<small>Jeff Kerzner <cite title="Slack Chat">Slack Chat</cite></small>
+<blockquote>
+      </div>
 	<div class="row">
 	    <div id='svg' class="col-md-9">
 		<figure id='svg-fig'>
@@ -55,6 +74,8 @@
 			</tbody>
 		    </table>
 		</div>
+	    </div>
+	    <div class = "row">
 		<div id="reportrange" class="col-md-3" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
 		    <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
 		    <span></span> <b class="caret"></b>
@@ -106,6 +127,7 @@
 	       'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
 	    },
 	    opens: 'left',
+	    drops: 'up',
 	    buttonClasses: ['btn', 'btn-sm'],
 	    applyClass: 'btn-primary',
 	    cancelClass: 'btn-default',

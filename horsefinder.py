@@ -7,7 +7,7 @@
 #
 #  Creation Date : 15-01-2015
 #
-#  Last Modified : Fri 03 Apr 2015 12:21:50 PM CDT
+#  Last Modified : Wed 23 Mar 2016 05:48:03 PM CDT
 #
 #  Created By : Brian Auron
 #
@@ -215,6 +215,10 @@ class HorseTweeter(TwythonStreamer):
             rts = is_retweet(data)
             if rts:
                 logging.info('HorseTweeter found a duplicate of an earlier retweet: {0} :: {1}'.format(text, rts))
+                return
+
+            if data['in_reply_to_status_id'] is not None:
+                logging.info('Ignoring replies because boring')
                 return
 
             retweeted = True
